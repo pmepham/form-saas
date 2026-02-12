@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureTenant;
+use App\Http\Middleware\IdentifyTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,7 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->appendToGroup('tenant', IdentifyTenant::class);
+        $middleware->alias([
+            'ensureTenant' => EnsureTenant::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
