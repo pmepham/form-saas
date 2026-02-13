@@ -50,4 +50,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($user) {
+
+            $tenant = Tenant::create([
+                'name' => $user->name . "'s Workspace",
+            ]);
+            $user->tenant_id = $tenant->id;
+        });
+    }
 }

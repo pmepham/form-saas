@@ -1,16 +1,21 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function(){
-    Route::get('/login', function () {
-        return view('auth.login');
-    })->name('login');
+    Route::resource('/login', LoginController::class)->only('index', 'store');
+    Route::resource('/register', RegisterController::class)->only('index', 'store');
 });
 
 Route::middleware(['tenant', 'ensureTenant', 'auth'])->group(function(){
+    Route::post('/logout', LogoutController::class)->name('logout');
+
     Route::get('/', function () {
         return view('dashboard.dashboard');
     })->name('dashboard');
+
 });
 

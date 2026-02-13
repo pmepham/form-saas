@@ -149,7 +149,8 @@
                                     <a href="account/settings.html" class="menu-link px-5">Account Settings</a>
                                 </div>
                                 <div class="menu-item px-5">
-                                    <a id="logout" class="menu-link px-5">Sign Out</a>
+                                    
+                                    <a id="logout" class="menu-link px-5" data-csrf="{{ csrf_token() }}" data-url="{{ route('logout') }}">Sign Out</a>
                                 </div>
                             </div>
                         </div>
@@ -258,6 +259,27 @@
     </script>
     <script src="{{asset('assets/plugins/global/plugins.bundle.js')}}"></script>
     <script src="{{asset('assets/js/scripts.bundle.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#logout').on('click', function(){
+                var logout = $(this);
+                $.ajax({
+                    url: logout.attr('data-url'),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': logout.attr('data-csrf')
+                    },
+                    type: 'POST',
+                    success: function(response){
+                        KTUtil.loadSwal('Logging Out', 'Please wait...', 'success');
+                        setTimeout(function () {
+                            window.location.assign(response.redirect);
+                        }, 1500);
+                    }
+                });
+            });
+        });
+    </script>
     {{ $javascript }}
 </body>
 
