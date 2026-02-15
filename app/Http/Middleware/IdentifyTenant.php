@@ -19,10 +19,9 @@ class IdentifyTenant
     {
         if (Auth::check()) {
             $tenant = Auth::user()->tenant;
-            if (! $tenant) {
-                throw new \RuntimeException('Tenant not set.');
+            if (!$tenant) {
+                throw new \RuntimeException('Tenant not set or user cannot access it.');
             }
-
             app(TenantManager::class)->setTenant($tenant);
         }
 

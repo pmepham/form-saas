@@ -78,7 +78,7 @@
                                 $('#error').hide();
                                 form.find('.is-invalid').removeClass('is-invalid')
                                 form.find('.form-control').addClass('is-valid')
-                                KTUtil.loadSwal('Logging In', 'Please wait...', 'success');
+                                KTUtil.loadSwal('Registering', 'Please wait...', 'success');
                                 setTimeout(function () {
                                     window.location.assign(response.redirect);
                                 }, 1500);

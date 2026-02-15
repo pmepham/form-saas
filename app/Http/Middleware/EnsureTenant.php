@@ -12,11 +12,9 @@ class EnsureTenant
     public function handle(Request $request, Closure $next): Response
     {
         $tenant = app(TenantManager::class)->tenant();
-
         if (! $tenant) {
             abort(404); // or 403 depending on your preference
         }
-
         return $next($request);
     }
 }

@@ -21,12 +21,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'tenant_id'
     ];
 
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class);
+    public function tenant(){
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
+
+    public function tenants()
+        {
+            return $this->belongsToMany(Tenant::class)->withTimestamps();
+        }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,12 +58,15 @@ class User extends Authenticatable
 
     protected static function booted(): void
     {
-        static::creating(function ($user) {
+        static::created(function ($user) {
 
             $tenant = Tenant::create([
                 'name' => $user->name . "'s Workspace",
             ]);
+            $user->tenants()->attach($tenant->id);
+            //current tenant_id
             $user->tenant_id = $tenant->id;
+            $user->save();
         });
     }
 }

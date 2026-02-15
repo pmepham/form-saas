@@ -15,6 +15,7 @@ class AuthService{
         //$user = Auth::user();
         //TODO: check user actvivity
         request()->session()->regenerate();
+        app(TenantManager::class)->setTenant(Auth::user()->tenant);
     }
 
     public function register(array $credentials){
