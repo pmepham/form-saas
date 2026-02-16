@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function(){
@@ -16,6 +17,8 @@ Route::middleware(['tenant', 'ensureTenant', 'auth'])->group(function(){
     Route::get('/', function () {
         return view('dashboard.dashboard');
     })->name('dashboard');
+
+    Route::resource('/workspace', WorkspaceController::class)->only('index');
 
 });
 

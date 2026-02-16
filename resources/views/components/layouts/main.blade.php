@@ -178,10 +178,17 @@
                             <div data-kt-menu-trigger="click" class="menu-item">
                                 <a class="menu-link" href="{{ route('dashboard') }}">
                                     <span class="menu-icon">
-                                        <i class="ki-solid ki-element-11 fs-1">
-                                        </i>
+                                        <i class="ki-solid ki-element-11 fs-1"></i>
                                     </span>
                                     <span class="menu-title">Dashboard</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a class="menu-link" href="{{ route('workspace.index') }}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                                    <span class="menu-icon">
+                                        <i class="ki-solid ki-folder fs-1"></i>
+                                    </span>
+                                    <span class="menu-title">Workspace</span>
                                 </a>
                             </div>
                             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
