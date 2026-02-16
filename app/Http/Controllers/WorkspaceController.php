@@ -6,8 +6,8 @@ use App\Models\Tenant;
 use App\Services\TenantManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 class WorkspaceController{
 
     public function index(){
@@ -21,18 +21,18 @@ class WorkspaceController{
         $id = 'create_workspace_submit';
         $title = 'Create a Workspace';
         $url = 'test';
+        Log::info($workspace);
         if(!empty($workspace->id)){
             $id = 'update_workspace_submit';
             $title = 'Edit a Workspace';
             $url = 'text-update';
         }
-        $footer = ['id' => $id, 'url' => $url];
-        Log::info($footer);
+
         //show the modal
         $modal = [
             'title' => $title,
-            'body' => Blade::render('workspace.workspace-modal', ['workspace' => $workspace], true),
-            'footer' => Blade::render('components.modal-footer', $footer, true)
+            'body' => view('workspace.workspace-modal', ['workspace' => $workspace])->render(),
+            'footer' => view('components.modal-footer', ['footer' => ['id' => $id, 'url' => $url]])->render(),
         ];
 
         return response()->json($modal);

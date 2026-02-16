@@ -23,7 +23,7 @@
                     @if($current_workspace->id != $workspace->id)
                     <a href="/keen/demo1/?page=apps/user-management/roles/view" class="btn btn-light btn-active-primary my-1 me-2">View Workspace</a>
                     @endif
-                    <button type="button" class="btn btn-light btn-active-light-primary my-1 edit_workspace" data-url="{{ route('workspace.show', $workspace->id) }}">Edit Workspace</button>
+                    <button type="button" class="btn btn-light btn-active-light-primary my-1 edit_workspace" data-url="{{ route('workspace.show', $workspace) }}">Edit Workspace</button>
                 </div>
             </div>
         </div>
@@ -34,9 +34,9 @@
         <div class="ol-md-4">
             <div class="card h-md-100">
                 <div class="card-body d-flex flex-center">
-                    <button type="button" class="btn btn-clear d-flex flex-column flex-center" data-bs-toggle="modal" data-bs-target="#kt_modal_add_role">
+                    <button type="button" class="btn btn-clear d-flex flex-column flex-center add_workspace" data-url="{{ route('workspace.show', 0) }}">
                         <img src="{{ asset('assets/media/illustrations/sketchy-1/4.png') }}" alt="" class="mw-100 mh-150px mb-7">                      
-                        <div class="fw-bold fs-3 text-gray-600 text-hover-primary add_workspace">Add New Workspace</div>
+                        <div class="fw-bold fs-3 text-gray-600 text-hover-primary">Add New Workspace</div>
                     </button>
                 </div>
             </div>
@@ -48,7 +48,7 @@
     <x-slot name='javascript'>
         <script>
             $(document).ready(function(){
-                $('add_workspace, .edit_workspace').on('click', function () {
+                $('.add_workspace, .edit_workspace').on('click', function () {
                     console.log($(this).attr('data-url'))
                     $.ajax({
                         url: $(this).attr('data-url'),
@@ -58,7 +58,7 @@
                             var modal = $('#modal_large');
                             modal.find('.modal-title').text(response.title);
                             modal.find('#modal_large_form').html(response.body);
-                            modal.find('.modal_footer').html(response.footer);
+                            modal.find('.modal-footer').html(response.footer);
                             modal.modal('show');
                         }
                     });

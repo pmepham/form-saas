@@ -11,13 +11,9 @@
             </div>
             <div class="modal-body">
                 <form id="{{ $id }}_form" class="mb-0">
-                    @csrf
-                    
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                <button id="{{ $id }}_submit" type="button" class="btn btn-primary" data-url="">Save</button>
             </div>
         </div>
     </div>
