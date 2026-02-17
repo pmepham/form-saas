@@ -18,7 +18,7 @@ Route::middleware(['tenant', 'ensureTenant', 'auth'])->group(function(){
         return view('dashboard.dashboard');
     })->name('dashboard');
 
-    Route::resource('/workspace', WorkspaceController::class)->only('index');
-    Route::get('/workspace/{workflow?}', [WorkspaceController::class, 'show'])->name('workspace.show');
+    Route::resource('/workspace', WorkspaceController::class)->only('index', 'create', 'show', 'store', 'update');
+    //Route::get('/workspace/{workspace}', [WorkspaceController::class, 'show'])->name('workspace.show');
 });
 

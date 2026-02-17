@@ -34,9 +34,9 @@
         <div class="ol-md-4">
             <div class="card h-md-100">
                 <div class="card-body d-flex flex-center">
-                    <button type="button" class="btn btn-clear d-flex flex-column flex-center add_workspace" data-url="{{ route('workspace.show', 0) }}">
+                    <button type="button" class="btn btn-clear d-flex flex-column flex-center add_workspace" data-url="{{ route('workspace.create') }}">
                         <img src="{{ asset('assets/media/illustrations/sketchy-1/4.png') }}" alt="" class="mw-100 mh-150px mb-7">                      
-                        <div class="fw-bold fs-3 text-gray-600 text-hover-primary">Add New Workspace</div>
+                        <div class="fw-bold fs-3 text-gray-600 text-hover-primary">Create New Workspace</div>
                     </button>
                 </div>
             </div>
@@ -49,19 +49,42 @@
         <script>
             $(document).ready(function(){
                 $('.add_workspace, .edit_workspace').on('click', function () {
-                    console.log($(this).attr('data-url'))
+                    var modal = $('#modal_large');
                     $.ajax({
                         url: $(this).attr('data-url'),
                         type: 'GET',
                         success: function(response){
-                            console.log(response)
-                            var modal = $('#modal_large');
                             modal.find('.modal-title').text(response.title);
                             modal.find('#modal_large_form').html(response.body);
                             modal.find('.modal-footer').html(response.footer);
                             modal.modal('show');
                         }
                     });
+                });
+
+                $('body').on('click', '#create_workspace_submit', function(){
+                    var modal = $('#modal_large');
+                    var form = $('#modal_large_form');
+                    var formData = form.serializeArray();
+                    KTUtil.loadSwal('Creating a Workspace', 'Please wait...', 'success');
+                    $.ajax({
+                        url: $(this).attr('data-url'),
+                        type: 'POST',
+                        data: formData,
+                        success: function(response){
+                            modal.modal('hide');
+                        },
+                        error: function(response){
+                            form.find('.is-invalid').removeClass('is-invalid');
+                            var errors = response.responseJSON.errors;
+                            if (errors != undefined) {
+                                form.find('.is-invalid').removeClass('is-invalid');
+                                $.each(errors, function (key, value) {
+                                    form.find('[name="' + key + '"]').addClass('is-invalid').closest('.form-input').find('.invalid-feedback').text(value[0]);
+                                });
+                            }
+                        }
+                    })
                 });
             });
         </script>

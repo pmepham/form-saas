@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WorkspaceRequest;
 use App\Models\Tenant;
 use App\Services\TenantManager;
 use Illuminate\Http\Request;
@@ -17,16 +18,25 @@ class WorkspaceController{
         return view('workspace.workspace', ['current_workspace' => $currentWorkspace, 'workspaces' => $workspaces]);
     }
 
-    public function show(Tenant $workspace){
+    public function create(){
         $id = 'create_workspace_submit';
         $title = 'Create a Workspace';
-        $url = 'test';
-        Log::info($workspace);
-        if(!empty($workspace->id)){
-            $id = 'update_workspace_submit';
-            $title = 'Edit a Workspace';
-            $url = 'text-update';
-        }
+        $url = route('workspace.store');
+
+        $modal = [
+            'title' => $title,
+            'body' => view('workspace.workspace-modal', ['workspace' => null])->render(),
+            'footer' => view('components.modal-footer', ['footer' => ['id' => $id, 'url' => $url]])->render(),
+        ];
+
+        return response()->json($modal);
+    }
+
+    public function show(Tenant $workspace){
+        
+        $id = 'update_workspace_submit';
+        $title = 'Edit a Workspace';
+        $url = route('workspace.update', $workspace);
 
         //show the modal
         $modal = [
@@ -38,11 +48,15 @@ class WorkspaceController{
         return response()->json($modal);
     }
 
-    public function store(){
+    public function store(WorkspaceRequest $workspaceRequest){
         //create the new workspace for that user
+        $validated = $workspaceRequest->validated();
+        $tenant = Tenant::create($validated);
+        $user = Auth::user();
+        $user->tenants()->attach($tenant->id);
     }
 
-    public function update(){
+    public function update(WorkspaceRequest $workspaceRequest, Tenant $workspace){
         //update the exisiting workspace
     }
 
