@@ -1,4 +1,4 @@
-@props(['id' => 'modal_large', 'size' => 'lg'])
+@props(['id' => 'modal_large', 'size' => 'lg', 'url'])
 
 <div class="modal fade" tabindex="-1" id="{{ $id }}" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-{{ $size }}">
@@ -11,9 +11,12 @@
             </div>
             <div class="modal-body">
                 <form id="{{ $id }}_form" class="mb-0">
+                    {{ $slot }}
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button id="{{ $id }}_submit" type="button" class="btn btn-success" data-url="{{ $url }}">Save</button>
             </div>
         </div>
     </div>

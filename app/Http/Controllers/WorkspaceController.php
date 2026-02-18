@@ -15,7 +15,7 @@ class WorkspaceController{
         $currentWorkspace = app(TenantManager::class)->tenant();
         $workspaces = Auth::user()->tenants;
 
-        return view('workspace.workspace', ['current_workspace' => $currentWorkspace, 'workspaces' => $workspaces]);
+        return view('workspace.workspace', ['current_workspace' => $currentWorkspace->id, 'workspaces' => $workspaces]);
     }
 
     public function create(){
@@ -51,19 +51,53 @@ class WorkspaceController{
     public function store(WorkspaceRequest $workspaceRequest){
         //create the new workspace for that user
         $validated = $workspaceRequest->validated();
-        $tenant = Tenant::create($validated);
+        $workspace = Tenant::create($validated);
         $user = Auth::user();
-        $user->tenants()->attach($tenant->id);
+        $currentWorkspace = app(TenantManager::class)->tenant()->id;
+        $user->tenants()->attach($workspace->id);
+
+        $html = view('components.workspace-card', [
+            'key' => $workspace->id,
+            'current_workspace' => $currentWorkspace,
+            'workspace' => $workspace,
+        ])->render();
+
+        return response()->json([
+            'html' => $html
+        ]);
     }
 
     public function update(WorkspaceRequest $workspaceRequest, Tenant $workspace){
-        //update the exisiting workspace
+        // Update the existing workspace
+        $validated = $workspaceRequest->validated();
+        $workspace->update($validated);
+
+        $currentWorkspace = app(TenantManager::class)->tenant()->id;
+
+        $html = view('components.workspace-card', [
+            'key' => $workspace->id,
+            'current_workspace' => $currentWorkspace,
+            'workspace' => $workspace->fresh(),
+        ])->render();
+
+        return response()->json([
+            'target' => 'workspace_'.$workspace->id,
+            'html' => $html
+        ]);
     }
 
     public function destory() {
         //remove the tenant_user relationship if they dont own it
 
         //if they own it soft delete
+    }
+
+    //change the users tenant
+    public function change($workspace){
+        $user = Auth::user();
+        $user->tenant_id = $workspace;
+        $user->save();
+        return response()->json(['redirect' => route('dashboard')]);
     }
 
 }

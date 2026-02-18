@@ -23,7 +23,7 @@ class WorkspaceRequest extends FormRequest
     {
         return [
             'id' => 'sometimes',
-            'name' => 'required'
+            'name' => 'required',
         ];
     }
 }

@@ -19,6 +19,6 @@ Route::middleware(['tenant', 'ensureTenant', 'auth'])->group(function(){
     })->name('dashboard');
 
     Route::resource('/workspace', WorkspaceController::class)->only('index', 'create', 'show', 'store', 'update');
-    //Route::get('/workspace/{workspace}', [WorkspaceController::class, 'show'])->name('workspace.show');
+    Route::patch('/workspace/view/{workspace}', [WorkspaceController::class, 'change'])->name('workspace.change');
 });
 
